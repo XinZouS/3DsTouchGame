@@ -17,21 +17,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var initialPlayerPosition : CGPoint!
     
-    
+
+    func addRandomRows() {
+        let randomNum = Int(arc4random_uniform(6))
+        addRow(type: RowType(rawValue: randomNum)!) // select from enum {..}
+    }
     
     override func didMove(to view: SKView) {
         
-        print("game should begin: didMove()")
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         self.physicsWorld.contactDelegate = self
                 
-        print("should adding players: ")
         addPlayer()
-        addRow(type: RowType.oneS)
+        addRow(type: RowType.twoM)
     }
+
+    // for updating Rows:
+    var lastUpdataTimeInterval = TimeInterval()
+    var lastYieldTimeInterval  = TimeInterval()
     
+    func updateWithTimeSiceLastUpdate(_ timeSinceLastUpdate: CFTimeInterval) {
+        lastYieldTimeInterval += timeSinceLastUpdate
+        if lastYieldTimeInterval > 0.7 {
+            lastYieldTimeInterval = 0
+            addRandomRows()
+        }
+    }
     override func update(_ currentTime: TimeInterval) {
+        var timeSinceLastUpdate = currentTime - lastUpdataTimeInterval
+        lastUpdataTimeInterval = currentTime
         
+        if timeSinceLastUpdate > 1 {
+            timeSinceLastUpdate = 1/60
+            lastUpdataTimeInterval = currentTime
+        }
+        
+        updateWithTimeSiceLastUpdate(timeSinceLastUpdate)
     }
 }
 

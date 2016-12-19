@@ -34,7 +34,6 @@ extension GameScene { // aka edit more code for class GameScene;
     
     func addPlayer() {
         player1 = SKSpriteNode(color: .cyan, size: CGSize(width: 50, height: 50))
-//        player1.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 4)
         player1.position = CGPoint(x: self.frame.size.width / 2, y: 300)
         player1.name = "PLAYER1"
         player1.physicsBody = SKPhysicsBody(rectangleOf: player1.size)
@@ -46,7 +45,7 @@ extension GameScene { // aka edit more code for class GameScene;
         
 
         player2 = SKSpriteNode(color: .cyan, size: CGSize(width: 50, height: 50))
-        player2.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 4)
+        player2.position = CGPoint(x: self.frame.size.width / 2, y: 300)
         player2.name = "PLAYER2"
         player2.physicsBody = SKPhysicsBody(rectangleOf: player2.size)
         player2.physicsBody?.isDynamic = false
@@ -58,9 +57,7 @@ extension GameScene { // aka edit more code for class GameScene;
         addChild(player1)
         addChild(player2)
         
-        print("adding player1, position: -----------------------")
         print(player1.position)
-        print("adding player2, position: -----------------------")
         print(player2.position)
         
         initialPlayerPosition = player1.position
@@ -68,19 +65,19 @@ extension GameScene { // aka edit more code for class GameScene;
     
     
     func addObstacle(type:ObstacleType) -> SKSpriteNode {
-        let obstacle = SKSpriteNode(color: .white, size: CGSize(width: 100, height: 30) )
+        var obstacle = SKSpriteNode(color: .white, size: CGSize(width: 10, height: 30) )
         obstacle.name = "OBSTACLE"
         obstacle.physicsBody?.isDynamic = true
         
         switch type {
         case .Small:
-            obstacle.size.width = self.size.width * 0.2
+            obstacle.size.width = self.size.width * 0.25
             break
         case .Medium:
-            obstacle.size.width = self.size.width * 0.5
+            obstacle.size.width = self.size.width * 0.275
             break
         case .Large:
-            obstacle.size.width = self.size.width * 0.75
+            obstacle.size.width = self.size.width * 0.6
             break
         }
         
@@ -89,7 +86,6 @@ extension GameScene { // aka edit more code for class GameScene;
         obstacle.physicsBody?.categoryBitMask = CollectionBitmask.Obstacle
         obstacle.physicsBody?.collisionBitMask = 0
         
-        print("obstacle position: \(obstacle.position)")
         return obstacle
     }
     
@@ -101,6 +97,8 @@ extension GameScene { // aka edit more code for class GameScene;
         obstacle.run(SKAction.sequence(actionArray))
     }
     
+    
+    
     func addRow(type:RowType) {
         switch type {
         case .oneS:
@@ -109,15 +107,60 @@ extension GameScene { // aka edit more code for class GameScene;
             addMovement(obstacle: &obst)
             addChild(obst)
             break
+        
         case .oneM:
+            var obst = addObstacle(type: .Medium)
+            obst.position = CGPoint(x: self.size.width / 2, y: obst.position.y)
+            addMovement(obstacle: &obst)
+            addChild(obst)
             break
+        
         case .oneL:
+            var obst = addObstacle(type: .Large)
+            obst.position = CGPoint(x: self.size.width / 2, y: obst.position.y)
+            addMovement(obstacle: &obst)
+            addChild(obst)
             break
+            
         case .twoS:
+            var obs1 = addObstacle(type: .Small)
+            var obs2 = addObstacle(type: .Small)
+            let offset : CGFloat = 100
+            
+            obs1.position = CGPoint(x: obs1.size.width + offset, y: obs1.position.y)
+            obs2.position = CGPoint(x: self.size.width - obs2.size.width - offset, y: obs2.position.y)
+            addMovement(obstacle: &obs1)
+            addMovement(obstacle: &obs2)
+            addChild(obs1)
+            addChild(obs2)
             break
+        
         case .twoM:
+            var obs1 = addObstacle(type: .Medium)
+            var obs2 = addObstacle(type: .Medium)
+            let offset : CGFloat = 50
+            obs1.position = CGPoint(x: obs1.size.width + offset, y: obs1.position.y)
+            obs2.position = CGPoint(x: self.size.width - obs2.size.width - offset, y: obs2.position.y)
+            addMovement(obstacle: &obs1)
+            addMovement(obstacle: &obs2)
+            addChild(obs1)
+            addChild(obs2)
             break
+        
         case .threeS:
+            var obs1 = addObstacle(type: .Small)
+            var obs2 = addObstacle(type: .Small)
+            var obs3 = addObstacle(type: .Small)
+            
+            obs1.position = CGPoint(x: obs1.size.width / 2, y: obs1.position.y)
+            obs2.position = CGPoint(x: self.frame.midX, y: obs2.position.y)
+            obs3.position = CGPoint(x: self.size.width - (obs3.size.width / 2), y: obs3.position.y)
+            addMovement(obstacle: &obs1)
+            addMovement(obstacle: &obs2)
+            addMovement(obstacle: &obs3)
+            addChild(obs1)
+            addChild(obs2)
+            addChild(obs3)
             break
         }
         
