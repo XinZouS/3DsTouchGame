@@ -18,6 +18,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var initialPlayerPosition : CGPoint!
     
 
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            let maximumPossibleForce = touch.maximumPossibleForce / 4
+            let force = touch.force * 1.5
+            let normalizedForce = force / maximumPossibleForce
+            
+            let midd = self.size.width / 2
+            player1.position.x = midd - normalizedForce * (midd - 25)
+            player2.position.x = midd + normalizedForce * (midd - 25)
+        }
+    }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        resetPlayersPosition()
+    }
+    func resetPlayersPosition() {
+        player1.position = initialPlayerPosition
+        player2.position = initialPlayerPosition
+    }
+    
     func addRandomRows() {
         let randomNum = Int(arc4random_uniform(6))
         addRow(type: RowType(rawValue: randomNum)!) // select from enum {..}
@@ -53,6 +72,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         updateWithTimeSiceLastUpdate(timeSinceLastUpdate)
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        if contact.bodyA.node?.name == "PLAYER" {
+            showGameOver()
+        }
+    }
+    func showGameOver() {
+        let transition = SKTransition.crossFade(withDuration: 0.5)
+        let gameOverScene = GameOverScene(size: self.size)
+        
+        self.view?.presentScene(gameOverScene, transition: transition)
     }
 }
 

@@ -35,7 +35,7 @@ extension GameScene { // aka edit more code for class GameScene;
     func addPlayer() {
         player1 = SKSpriteNode(color: .cyan, size: CGSize(width: 50, height: 50))
         player1.position = CGPoint(x: self.frame.size.width / 2, y: 300)
-        player1.name = "PLAYER1"
+        player1.name = "PLAYER"
         player1.physicsBody = SKPhysicsBody(rectangleOf: player1.size)
         player1.physicsBody?.isDynamic = false
         
@@ -46,7 +46,7 @@ extension GameScene { // aka edit more code for class GameScene;
 
         player2 = SKSpriteNode(color: .cyan, size: CGSize(width: 50, height: 50))
         player2.position = CGPoint(x: self.frame.size.width / 2, y: 300)
-        player2.name = "PLAYER2"
+        player2.name = "PLAYER"
         player2.physicsBody = SKPhysicsBody(rectangleOf: player2.size)
         player2.physicsBody?.isDynamic = false
         
@@ -138,9 +138,9 @@ extension GameScene { // aka edit more code for class GameScene;
         case .twoM:
             var obs1 = addObstacle(type: .Medium)
             var obs2 = addObstacle(type: .Medium)
-            let offset : CGFloat = 50
-            obs1.position = CGPoint(x: obs1.size.width + offset, y: obs1.position.y)
-            obs2.position = CGPoint(x: self.size.width - obs2.size.width - offset, y: obs2.position.y)
+            let offset : CGFloat = 80
+            obs1.position = CGPoint(x: obs1.size.width - offset, y: obs1.position.y)
+            obs2.position = CGPoint(x: self.size.width - obs2.size.width + offset, y: obs2.position.y)
             addMovement(obstacle: &obs1)
             addMovement(obstacle: &obs2)
             addChild(obs1)
@@ -151,10 +151,11 @@ extension GameScene { // aka edit more code for class GameScene;
             var obs1 = addObstacle(type: .Small)
             var obs2 = addObstacle(type: .Small)
             var obs3 = addObstacle(type: .Small)
+            let offset: CGFloat = 50
             
-            obs1.position = CGPoint(x: obs1.size.width / 2, y: obs1.position.y)
+            obs1.position = CGPoint(x: obs1.size.width / 2 - offset, y: obs1.position.y)
             obs2.position = CGPoint(x: self.frame.midX, y: obs2.position.y)
-            obs3.position = CGPoint(x: self.size.width - (obs3.size.width / 2), y: obs3.position.y)
+            obs3.position = CGPoint(x: self.size.width - (obs3.size.width / 2) + offset, y: obs3.position.y)
             addMovement(obstacle: &obs1)
             addMovement(obstacle: &obs2)
             addMovement(obstacle: &obs3)
