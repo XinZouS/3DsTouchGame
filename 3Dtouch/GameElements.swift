@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import GameplayKit
 
 
 struct CollectionBitmask {
@@ -32,8 +33,9 @@ enum RowType: Int {
 extension GameScene { // aka edit more code for class GameScene;
     
     func addPlayer() {
-        player1 = SKSpriteNode(color: .red, size: CGSize(width: 50, height: 50))
-        player1.position = CGPoint(x: self.size.width / 2, y: self.size.height / 4)
+        player1 = SKSpriteNode(color: .cyan, size: CGSize(width: 50, height: 50))
+//        player1.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 4)
+        player1.position = CGPoint(x: self.frame.size.width / 2, y: 300)
         player1.name = "PLAYER1"
         player1.physicsBody = SKPhysicsBody(rectangleOf: player1.size)
         player1.physicsBody?.isDynamic = false
@@ -43,9 +45,9 @@ extension GameScene { // aka edit more code for class GameScene;
         player1.physicsBody?.contactTestBitMask = CollectionBitmask.Obstacle
         
 
-        player2 = SKSpriteNode(color: .red, size: CGSize(width: 50, height: 50))
-        player2.position = CGPoint(x: self.size.width / 2, y: self.size.height / 4)
-        player2.name = "PLAYER1"
+        player2 = SKSpriteNode(color: .cyan, size: CGSize(width: 50, height: 50))
+        player2.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 4)
+        player2.name = "PLAYER2"
         player2.physicsBody = SKPhysicsBody(rectangleOf: player2.size)
         player2.physicsBody?.isDynamic = false
         
@@ -56,12 +58,17 @@ extension GameScene { // aka edit more code for class GameScene;
         addChild(player1)
         addChild(player2)
         
+        print("adding player1, position: -----------------------")
+        print(player1.position)
+        print("adding player2, position: -----------------------")
+        print(player2.position)
+        
         initialPlayerPosition = player1.position
     }
     
     
     func addObstacle(type:ObstacleType) -> SKSpriteNode {
-        let obstacle = SKSpriteNode(color: .white, size: CGSize(width: 0, height: 30) )
+        let obstacle = SKSpriteNode(color: .white, size: CGSize(width: 100, height: 30) )
         obstacle.name = "OBSTACLE"
         obstacle.physicsBody?.isDynamic = true
         
@@ -77,15 +84,16 @@ extension GameScene { // aka edit more code for class GameScene;
             break
         }
         
-        obstacle.position = CGPoint(x: 0, y: self.size.height + obstacle.size.height)
+        obstacle.position = CGPoint(x: 0, y: self.frame.height + obstacle.size.height)
         obstacle.physicsBody = SKPhysicsBody(rectangleOf: obstacle.size)
         obstacle.physicsBody?.categoryBitMask = CollectionBitmask.Obstacle
         obstacle.physicsBody?.collisionBitMask = 0
         
+        print("obstacle position: \(obstacle.position)")
         return obstacle
     }
     
-    func addMovement(obstacle:SKSpriteNode) {
+    func addMovement(obstacle : inout SKSpriteNode) {
         var actionArray = [SKAction]()
         actionArray.append(SKAction.move(to: CGPoint(x: obstacle.position.x, y: -obstacle.size.height), duration: 3))
         actionArray.append(SKAction.removeFromParent())
@@ -96,9 +104,9 @@ extension GameScene { // aka edit more code for class GameScene;
     func addRow(type:RowType) {
         switch type {
         case .oneS:
-            let obst = addObstacle(type: .Small)
+            var obst = addObstacle(type: .Small)
             obst.position = CGPoint(x: self.size.width / 2, y: obst.position.y)
-            addMovement(obstacle: obst)
+            addMovement(obstacle: &obst)
             addChild(obst)
             break
         case .oneM:

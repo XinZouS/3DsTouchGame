@@ -7,21 +7,27 @@
 //
 
 
+import GameplayKit
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    var player1 : SKSpriteNode!
-    var player2 : SKSpriteNode!
+    var player1 = SKSpriteNode()
+    var player2 = SKSpriteNode()
     
     var initialPlayerPosition : CGPoint!
     
+    
+    
     override func didMove(to view: SKView) {
-        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-        physicsWorld.contactDelegate = self
         
+        print("game should begin: didMove()")
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        self.physicsWorld.contactDelegate = self
+                
+        print("should adding players: ")
         addPlayer()
-        addRow(type: .oneM)
+        addRow(type: RowType.oneS)
     }
     
     override func update(_ currentTime: TimeInterval) {
